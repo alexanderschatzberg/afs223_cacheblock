@@ -16,7 +16,13 @@
  * (They are arrays of n*n elements each.) C is initialized to zero.
  */
 void matmult(int n, double* A, double* B, double* C) {
-    /*  YOUR CODE HERE  */
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            for (int k = 0; k < n; k++) {
+                C[i * n + j] += A[i * n + k] * B[k * n + j];
+            }
+        }
+    }
 }
 
 /*
@@ -30,7 +36,13 @@ void matmult(int n, double* A, double* B, double* C) {
  * column-major matrix. C is initialized to zero.
  */
 void matmult_cm(int n, double* A, double* B, double* C) {
-    /*  YOUR CODE HERE  */
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            for (int k = 0; k < n; k++) {
+                C[i * n + j] += A[i * n + k] * B[j * n + k];
+            }
+        }
+    }
 }
 
 /*
@@ -47,9 +59,14 @@ void matmult_cm(int n, double* A, double* B, double* C) {
  * initialized to zero.
  */
 void matmult_li(int n, double* A, double* B, double* C) {
-    /*  YOUR CODE HERE  */
+    for (int i = 0; i < n; i++) {
+        for (int k = 0; k < n; k++) {
+            for (int j = 0; j < n; j++) {
+                C[i * n + j] += A[i * n + k] * B[k * n + j];
+            }
+        }
+    }
 }
-
 /*
  * TASK 1
  *
@@ -59,5 +76,33 @@ void matmult_li(int n, double* A, double* B, double* C) {
  * initialized to zero.
  */
 void matmult_bl(int n, double* A, double* B, double* C) {
-    /*  YOUR CODE HERE  */
+    int n_blocks = (n + BLOCKSZ - 1) / BLOCKSZ; // Ceiling division to cover all elements
+
+    for (int ii = 0; ii < n_blocks; ii++) {
+        int i_start = ii * BLOCKSZ;
+        int i_end = (i_start + BLOCKSZ < n) ? (i_start + BLOCKSZ) : n;
+
+        for (int jj = 0; jj < n_blocks; jj++) {
+            int j_start = jj * BLOCKSZ;
+            int j_end = (j_start + BLOCKSZ < n) ? (j_start + BLOCKSZ) : n;
+
+            for (int kk = 0; kk < n_blocks; kk++) {
+                int k_start = kk * BLOCKSZ;
+                int k_end = (k_start + BLOCKSZ < n) ? (k_start + BLOCKSZ) : n;
+
+                if (check_shortcircuit()) return;
+
+                for (int i = i_start; i < i_end; i++) {
+                    for (int j = j_start; j < j_end; j++) {
+                        double sum = 0.0;
+                        for (int k = k_start; k < k_end; k++) {
+                            sum += A[i * n + k] * B[k * n + j];
+                        }
+                        C[i * n + j] += sum;
+                    }
+                }
+            }
+        }
+    }
 }
+

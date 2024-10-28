@@ -1,0 +1,9 @@
+Discussion 2:
+
+What is the best block size on your machine? (Is it consistent across different matrix sizes?)
+
+The best block size on my machine seems to be 8, which is consistent across different matrix sizes. With larger block sizes, the performance continues to marginally increase, but the difference is quite small.
+
+Is there a block size beyond which performance seems to degrade? What does this tell you about the size of your computer’s caches?
+
+There doesn't seem to be a block size beyond which performance degrades. This suggests that my cache size is large enough to store the entirety of any matrix that I would be multiplying with on my computer laptop (n < 512). 
